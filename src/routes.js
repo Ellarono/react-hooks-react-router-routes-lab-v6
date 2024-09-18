@@ -6,7 +6,7 @@ import Directors from './pages/Directors';
 import Movie from './pages/Movie';
 import ErrorPage from './pages/ErrorPage'; 
 
-// Define the routes configuration
+// Define the routes configuration for the application
 const routes = [
   {
     path: "/",
@@ -30,15 +30,12 @@ const routes = [
   },
 ];
 
-// Export the routes array
-export const routesConfig = {
-  routes,
-};
+// Export the router for the main application
+export const router = createBrowserRouter(routes);
 
-// For testing purposes, you might want to export a memory router configuration
+// Export the memory router configuration for tests
 export const memoryRouterConfig = (initialEntries) => 
-  createMemoryRouter(routes, {
-    initialEntries,
-  });
+  createMemoryRouter(routes, { initialEntries });
 
+// Default export of the routes configuration
 export default routes;

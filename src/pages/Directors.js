@@ -1,39 +1,48 @@
-// src/Directors.js
-import React from 'react';
-import NavBar from '../components/NavBar'; 
-
-const directors = [
-  {
-    name: "Scott Derrickson",
-    movies: ["Doctor Strange", "Sinister", "The Exorcism of Emily Rose"],
-  },
-  {
-    name: "Mike Mitchell",
-    movies: ["Trolls", "Alvin and the Chipmunks: Chipwrecked", "Sky High"],
-  },
-  {
-    name: "Edward Zwick",
-    movies: ["Jack Reacher: Never Go Back", "Blood Diamond", "The Siege"],
-  },
-];
+import React, { useEffect, useState } from 'react';
+import NavBar from '../components/NavBar';
 
 const Directors = () => {
+  const [directors, setDirectors] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Fetch directors from the db.json file
+    fetch('http://localhost:5000/directors')
+      .then(response => response.json())
+      .then(data => {
+        setDirectors(data);
+        setLoading(false);
+      })
+      .catch(error => {
+        console.error('Error fetching directors:', error);
+        setLoading(false);
+      });
+  }, []);
+
   return (
     <div>
       <NavBar />
       <h1>Directors Page</h1>
-      <ul>
-        {directors.map((director) => (
-          <li key={director.name}>
-            <h2>{director.name}</h2>
-            <ul>
-              {director.movies.map((movie) => (
-                <li key={movie}>{movie}</li>
-              ))}
-            </ul>
-          </li>
-        ))}
-      </ul>
+      <div>
+        {loading ? (
+          <p>Loading directors...</p>
+        ) : directors.length > 0 ? (
+          <ul>
+            {directors.map(director => (
+              <li key={director.name}>
+                <h2>{director.name}</h2>
+                <ul>
+                  {director.movies.map(movie => (
+                    <li key={movie}>{movie}</li>
+                  ))}
+                </ul>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p>No directors available</p>
+        )}
+      </div>
     </div>
   );
 };
